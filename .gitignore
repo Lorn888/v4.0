@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# OS-specific files
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local editor settings
+.vscode/
+.idea/
+
+# Canvas / Tensorflow temp folders
+*.pb  # protobuf files, if any
+*.h5  # model weights, if generated
+
+# Optional: ignore your dataset if it's large
+# dataset/
