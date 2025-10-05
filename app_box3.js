@@ -55,3 +55,14 @@ window.addEventListener('load', async ()=>{
   await loadResources();
   document.getElementById('identifyBtn').addEventListener('click', captureAndIdentify);
 });
+
+function findPoster(vec){
+  let best=null, bestScore=-1;
+  for(const id of Object.keys(embeddings)){
+    for(const emb of embeddings[id]){ // loop through all 3 embeddings
+      const score=cosineSim(vec, emb);
+      if(score>bestScore){bestScore=score; best=id;}
+    }
+  }
+  return {id:best, score:bestScore};
+}

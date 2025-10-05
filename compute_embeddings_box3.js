@@ -30,9 +30,7 @@ async function main() {
       vectors.push(Array.from(embedding.dataSync()));
       tensor.dispose(); embedding.dispose();
     }
-    // average the 3 images
-    const avg = vectors[0].map((_, i) => vectors.reduce((sum,v)=>sum+v[i],0)/vectors.length);
-    embeddings[posterId] = avg;
+    embeddings[posterId] = vectors; // array of 3 embeddings
   }
 
   fs.writeFileSync('embeddings_box3.json', JSON.stringify(embeddings));
