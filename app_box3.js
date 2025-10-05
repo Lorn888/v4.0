@@ -34,30 +34,14 @@ function findBox(id){
   return null;
 }
 
-async function captureAndIdentifyMultipleFrames(frames=5){
-  let avgVec = null;
-
-  for(let i=0;i<frames;i++){
-    const canvas=document.createElement('canvas'); canvas.width=224; canvas.height=224;
-    canvas.getContext('2d').drawImage(video,0,0,224,224);
-    const img=tf.browser.fromPixels(canvas).toFloat();
-    const normalized=img.sub(tf.scalar(127.5)).div(tf.scalar(127.5)).expandDims(0);
-    const embedding=model.infer(normalized,true);
-    const vec=Array.from(embedding.dataSync());
-    embedding.dispose(); img.dispose(); normalized.dispose();
-
-    if(!avgVec) avgVec=vec;
-    else avgVec = avgVec.map((v,i)=>v+vec[i]);
-    await new Promise(r=>setTimeout(r,100)); // 100ms between frames
-  }
-
-  avgVec = avgVec.map(v=>v/frames);
-  const {id, score}=findPoster(avgVec);
-  const box=findBox(id);
-  document.getElementById('result').innerHTML = score>=0.62 ? 
-    `Poster: ${id}<br>Box: ${box}<br>Confidence: ${score.toFixed(3)}` :
-    `No confident match (top: ${id ?? 'n/a'}, score: ${score.toFixed(3)})`;
-}
+async function captureAndIdentify(){
+  const canvas=document.createElement('canvas'); canvas.width=224; canvas.height=224;
+  canvas.getContext('2d').drawImage(video,0,0,224,224);
+  const img=tf.browser.fromPixels(canvas).toFloat();
+  const normalized=img.sub(tf.scalar(127.5)).div(tf.scalar(127.5)).expandDims(0);
+  const embedding=model.infer(normalized,true);
+  const vec=Array.from(embedding.dataSync());
+  embedding.dispose(); img.dispose(); normalized.dispose();
 
   const {id, score}=findPoster(vec);
   const box=findBox(id);
